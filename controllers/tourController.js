@@ -1,19 +1,39 @@
 const Tour = require('./../models/tourModel');
 
-exports.getAllTours = (req, res) => {
-  res.status(200).json({
-    status: 'success'
-    // results: tours.length,
-    // data: {
-    //   tours
-    // }
-  });
+exports.getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find();
+
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
 };
 
-exports.getTour = (req, res) => {
-  console.log(req.params);
-  const id = req.params.id * 1;
-  // const tour = tours.find(el => el.id === id);
+exports.getTour = async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour
+      }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
 
   // res.status(200).json({
   //   status: 'success',
@@ -42,11 +62,37 @@ exports.createTour = async (req, res) => {
   }
 };
 
-exports.updateTour = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '<Updated tour here...>'
-    }
-  });
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'Ivalid data sent.'
+    });
+  }
+};
+
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'deleted',
+      data: null
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed to delete',
+      message: err
+    });
+  }
 };
