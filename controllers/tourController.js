@@ -14,6 +14,7 @@ exports.getAllTours = async (req, res) => {
     //   .equals(5)
     //   .where('difficulty')
     //   .equals('easy');
+    //
 
     //Executing the querry
     const tours = await query;
