@@ -11,6 +11,10 @@ const router = express.Router();
 // now creating it and using it in middleware
 
 router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTour, tourController.getAllTours);
+
+router
   .route('/')
   .get(tourController.getAllTours)
   .post(tourController.createTour);
@@ -20,7 +24,5 @@ router
   .get(tourController.getTour)
   .patch(tourController.updateTour)
   .delete(tourController.deleteTour);
-  
-  
 
 module.exports = router;
